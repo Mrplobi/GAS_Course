@@ -6,6 +6,8 @@
 #include "Character/GASCharacterBase.h"
 #include "GasCharacter.generated.h"
 
+class uhduhd;
+
 /**
  * 
  */
