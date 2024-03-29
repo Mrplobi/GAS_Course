@@ -4,10 +4,18 @@
 #include "Player/AuraPlayerController.h"
 #include <EnhancedInputSubsystems.h>
 #include <EnhancedInputComponent.h>
+#include <Interaction/HoverInterface.h>
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -48,5 +56,43 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 	{
 		ControllerPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControllerPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+	}
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+
+	if (CursorHit.bBlockingHit)
+	{
+		LastHover = CurrentHover;
+		CurrentHover = Cast<IHoverInterface>(CursorHit.GetActor());
+
+		if (LastHover == nullptr && CurrentHover != nullptr)
+		{
+			CurrentHover->HighlightActor();
+		}
+		else if (LastHover != nullptr)
+		{
+			if (CurrentHover == nullptr)
+			{
+				LastHover->UnhighlightActor();
+			}
+			else if(CurrentHover != LastHover)
+			{
+				CurrentHover->HighlightActor();
+				LastHover->UnhighlightActor();
+			}
+		}
+	}
+	else
+	{
+		if (LastHover != nullptr)
+		{
+			LastHover->UnhighlightActor();
+			CurrentHover = nullptr;
+			LastHover = nullptr;
+		}
 	}
 }
