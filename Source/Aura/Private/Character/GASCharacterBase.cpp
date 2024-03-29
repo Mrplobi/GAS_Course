@@ -16,3 +16,8 @@ void AGASCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 }
+
+UAbilitySystemComponent* AGASCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}

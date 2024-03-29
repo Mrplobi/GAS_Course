@@ -2,11 +2,19 @@
 
 
 #include "Character/GasEnemy.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 #include <Aura/Aura.h>
 
 AGasEnemy::AGasEnemy()
 {
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
+	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 
 void AGasEnemy::HighlightActor()
@@ -21,4 +29,9 @@ void AGasEnemy::UnhighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AGasEnemy::BeginPlay()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
