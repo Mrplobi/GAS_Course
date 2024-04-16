@@ -33,5 +33,12 @@ void AGasEnemy::UnhighlightActor()
 
 void AGasEnemy::BeginPlay()
 {
+	Super::BeginPlay();
+	InitAbilityActorInfo();
+}
+
+void AGasEnemy::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

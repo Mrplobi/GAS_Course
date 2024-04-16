@@ -2,7 +2,9 @@
 
 
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
+#include "GameplayEffectExtension.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -20,6 +22,71 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+}
+
+void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	Super::PreAttributeChange(Attribute, NewValue);
+
+	if (Attribute == GetHealthAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetMaxHealth());
+	}
+	else if (Attribute == GetManaAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0, GetMaxMana());
+	}
+}
+
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+
+	FEffectProperties EffectProperties;
+	SetEffectProperties(Data, EffectProperties);
+}
+
+void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Properties) const
+{
+	//Source is causer of Effect, Target is the one receiving effect i.e owner of this AS
+
+	Properties.EffectContextHandle = Data.EffectSpec.GetContext();
+
+	Properties.SourceASC = Properties.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+	if (IsValid(Properties.SourceASC) && Properties.SourceASC->AbilityActorInfo.IsValid() && Properties.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Properties.SourceAvatarActor = Properties.SourceASC->AbilityActorInfo->AvatarActor.Get();
+		Properties.SourceController = Properties.SourceASC->AbilityActorInfo->PlayerController.Get();
+		if (Properties.SourceController == nullptr && Properties.SourceAvatarActor != nullptr)
+		{
+			if (const APawn* Pawn = Cast<APawn>(Properties.SourceAvatarActor))
+			{
+				Properties.SourceController = Pawn->GetController();
+			}
+		}
+		if (Properties.SourceController)
+		{
+			Properties.SourceCharacter = Cast<ACharacter>(Properties.SourceController->GetPawn());
+		}
+	}
+	
+	Properties.TargetASC = Properties.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+	if (IsValid(Properties.TargetASC) && Properties.TargetASC->AbilityActorInfo.IsValid() && Properties.TargetASC->AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Properties.TargetAvatarActor = Properties.TargetASC->AbilityActorInfo->AvatarActor.Get();
+		Properties.TargetController = Properties.TargetASC->AbilityActorInfo->PlayerController.Get();
+		if (Properties.TargetController == nullptr && Properties.TargetAvatarActor != nullptr)
+		{
+			if (const APawn* Pawn = Cast<APawn>(Properties.TargetAvatarActor))
+			{
+				Properties.TargetController = Pawn->GetController();
+			}
+		}
+		if (Properties.TargetController)
+		{
+			Properties.TargetCharacter = Cast<ACharacter>(Properties.TargetController->GetPawn());
+		}
+	}
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

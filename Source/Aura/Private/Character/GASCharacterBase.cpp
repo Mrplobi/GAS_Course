@@ -17,6 +17,10 @@ void AGASCharacterBase::BeginPlay()
 	
 }
 
+void AGASCharacterBase::InitAbilityActorInfo()
+{
+}
+
 UAbilitySystemComponent* AGASCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
