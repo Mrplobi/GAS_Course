@@ -8,6 +8,7 @@
 #include "GASCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
+class UGameplayEffect;
 class UAuraAbilitySystemComponent;
 class UAttributeSet;
 
@@ -27,6 +28,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
 
+	void InitializePrimaryAttributes() const;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -36,6 +38,8 @@ protected:
 	TObjectPtr<UAuraAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
 
 

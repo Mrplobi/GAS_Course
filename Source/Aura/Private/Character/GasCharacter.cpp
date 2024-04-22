@@ -48,6 +48,7 @@ void AGasCharacter::InitAbilityActorInfo()
 			HUD->InitOverlay(AuraController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
+	InitializePrimaryAttributes();
 }
 
 
