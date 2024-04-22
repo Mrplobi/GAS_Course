@@ -8,6 +8,7 @@
 #include "GASCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
+class UAuraAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS(Abstract)
@@ -32,7 +33,7 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	UPROPERTY()
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UAuraAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 

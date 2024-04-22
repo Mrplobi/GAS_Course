@@ -8,7 +8,7 @@
 
 class UAuraUserWidget;
 class UOverlayWidgetController;
-class UAbilitySystemComponent;
+class UAuraAbilitySystemComponent;
 class UAttributeSet;
 struct FWidgetControllerParams;
 /**
@@ -22,7 +22,7 @@ class AURA_API AAuraHUD : public AHUD
 public:
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams&);
 
-	void InitOverlay(APlayerController* PlayerC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
+	void InitOverlay(APlayerController* PlayerC, APlayerState* PS, UAuraAbilitySystemComponent* ASC, UAttributeSet* AS);
 
 private:
 	UPROPERTY()

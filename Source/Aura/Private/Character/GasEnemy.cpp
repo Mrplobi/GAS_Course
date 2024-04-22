@@ -40,5 +40,5 @@ void AGasEnemy::BeginPlay()
 void AGasEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	AbilitySystemComponent->AbilityActorInfoSet();
 }

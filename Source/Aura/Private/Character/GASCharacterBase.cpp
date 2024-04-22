@@ -1,6 +1,7 @@
 // By Plobindustries
 
 #include "Character/GASCharacterBase.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"	
 
 AGASCharacterBase::AGASCharacterBase()
 {
@@ -23,5 +24,5 @@ void AGASCharacterBase::InitAbilityActorInfo()
 
 UAbilitySystemComponent* AGASCharacterBase::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	return AbilitySystemComponent.Get();
 }

@@ -19,7 +19,7 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 
 }
 
-void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
+void AAuraHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAuraAbilitySystemComponent* ASC, UAttributeSet* AS)
 {
     checkf(OverlayWidgetClass, TEXT("OverlayWidgetClass was not set, Check BP_AuraHUD"));
     checkf(OverlayWidgetControlerClass, TEXT("OverlayWidgetControllerClass was not set, Check BP_AuraHUD"));
