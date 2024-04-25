@@ -31,6 +31,11 @@ void AGasEnemy::UnhighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
+int32 AGasEnemy::GetCharacterLevel() const
+{
+	return Level;
+}
+
 void AGasEnemy::BeginPlay()
 {
 	Super::BeginPlay();

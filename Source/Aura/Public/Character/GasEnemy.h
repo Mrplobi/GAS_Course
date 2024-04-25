@@ -21,8 +21,15 @@ public:
 	void HighlightActor() override;
 	void UnhighlightActor() override;
 
+	// Inherited via ICombatInterface
+	virtual int32 GetCharacterLevel() const override;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	int32 Level = 1;
 
 };

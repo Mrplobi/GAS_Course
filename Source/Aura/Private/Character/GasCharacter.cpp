@@ -31,6 +31,13 @@ void AGasCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 AGasCharacter::GetCharacterLevel() const
+{
+	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	return AuraPlayerState->GetCharacterLevel();
+}
+
 void AGasCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
@@ -48,7 +55,7 @@ void AGasCharacter::InitAbilityActorInfo()
 			HUD->InitOverlay(AuraController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
-	InitializePrimaryAttributes();
+	InitializeDefaultAttributes();
 }
 
 

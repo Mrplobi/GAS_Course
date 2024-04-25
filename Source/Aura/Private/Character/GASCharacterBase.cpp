@@ -22,12 +22,20 @@ void AGASCharacterBase::InitAbilityActorInfo()
 {
 }
 
-void AGASCharacterBase::InitializePrimaryAttributes() const
+void AGASCharacterBase::InitializeDefaultAttributes() const
+{
+	ApplyEffectToSelf(DefaultPrimaryAttributes, 1);
+	ApplyEffectToSelf(DefaultSecondaryAttributes, 1);
+	ApplyEffectToSelf(DefaultVitalAttributes, 1);
+}
+
+void AGASCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectToApply, float Level) const
 {
 	check(IsValid(GetAbilitySystemComponent()));
-	check(DefaultPrimaryAttributes);
-	const FGameplayEffectContextHandle Context = GetAbilitySystemComponent()->MakeEffectContext();
-	const FGameplayEffectSpecHandle EffectSpec = GetAbilitySystemComponent()->MakeOutgoingSpec(DefaultPrimaryAttributes, 1, Context);
+	check(EffectToApply);
+	FGameplayEffectContextHandle Context = GetAbilitySystemComponent()->MakeEffectContext();
+	Context.AddSourceObject(this);
+	const FGameplayEffectSpecHandle EffectSpec = GetAbilitySystemComponent()->MakeOutgoingSpec(EffectToApply, Level, Context);
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpec.Data.Get(), GetAbilitySystemComponent());
 }
 
