@@ -39,6 +39,14 @@ void AGASCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> EffectToA
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*EffectSpec.Data.Get(), GetAbilitySystemComponent());
 }
 
+void AGASCharacterBase::AddCharacterStartingAbilities()
+{
+	if (!HasAuthority())
+		return;
+
+	AbilitySystemComponent->AddCharacterAbilities(StartupAbilities);
+}
+
 UAbilitySystemComponent* AGASCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent.Get();

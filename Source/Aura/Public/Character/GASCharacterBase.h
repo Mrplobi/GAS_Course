@@ -12,6 +12,7 @@ class UAbilitySystemComponent;
 class UGameplayEffect;
 class UAuraAbilitySystemComponent;
 class UAuraAttributeSet;
+class UAuraGameplayAbility;
 
 UCLASS(Abstract)
 class AURA_API AGASCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -32,6 +33,8 @@ protected:
 	void InitializeDefaultAttributes() const;
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const;
 
+	void AddCharacterStartingAbilities();
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
@@ -46,6 +49,10 @@ protected:
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TArray<TSubclassOf<UAuraGameplayAbility>> StartupAbilities;
 
 
 

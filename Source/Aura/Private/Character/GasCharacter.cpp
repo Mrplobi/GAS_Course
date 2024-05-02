@@ -25,6 +25,7 @@ void AGasCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	InitAbilityActorInfo();
+	AddCharacterStartingAbilities();
 }
 void AGasCharacter::OnRep_PlayerState()
 {
