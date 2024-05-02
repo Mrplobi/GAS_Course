@@ -69,31 +69,20 @@ void AAuraPlayerController::CursorTrace()
 	{
 		LastHover = CurrentHover;
 		CurrentHover = Cast<IHoverInterface>(CursorHit.GetActor());
-
-		if (LastHover == nullptr && CurrentHover != nullptr)
-		{
-			CurrentHover->HighlightActor();
-		}
-		else if (LastHover != nullptr)
-		{
-			if (CurrentHover == nullptr)
-			{
-				LastHover->UnhighlightActor();
-			}
-			else if(CurrentHover != LastHover)
-			{
-				CurrentHover->HighlightActor();
-				LastHover->UnhighlightActor();
-			}
-		}
 	}
 	else
 	{
-		if (LastHover != nullptr)
-		{
-			LastHover->UnhighlightActor();
-			CurrentHover = nullptr;
-			LastHover = nullptr;
-		}
+		LastHover = CurrentHover;
+		CurrentHover = nullptr;
+	}
+
+	if (LastHover != nullptr)
+	{
+		LastHover->UnhighlightActor();
+	}
+
+	if (CurrentHover != nullptr)
+	{
+		CurrentHover->UnhighlightActor();
 	}
 }

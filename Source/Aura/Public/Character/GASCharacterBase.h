@@ -11,7 +11,7 @@
 class UAbilitySystemComponent;
 class UGameplayEffect;
 class UAuraAbilitySystemComponent;
-class UAttributeSet;
+class UAuraAttributeSet;
 
 UCLASS(Abstract)
 class AURA_API AGASCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -23,7 +23,7 @@ public:
 	// Inherited via IAbilitySystemInterface
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet; };
+	FORCEINLINE UAuraAttributeSet* GetAttributeSet() const { return AttributeSet; };
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,7 +39,7 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAuraAttributeSet> AttributeSet;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")

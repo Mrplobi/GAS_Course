@@ -9,7 +9,7 @@
 
 class UAuraAbilitySystemComponent;
 class UAbilitySystemComponent;
-class UAttributeSet;
+class UAuraAttributeSet;
 
 /**
  *
@@ -26,7 +26,7 @@ public:
 	// Inherited via IAbilitySystemInterface
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet; };
+	FORCEINLINE UAuraAttributeSet* GetAttributeSet() const { return AttributeSet; };
 
 	FORCEINLINE int32 GetCharacterLevel() const { return Level; };
 
@@ -39,7 +39,7 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UAuraAttributeSet> AttributeSet;
 
 private:
 	UPROPERTY(VisibleAnywhere, Replicated, ReplicatedUsing = OnRep_Level, Category = "Character Class Defaults")
