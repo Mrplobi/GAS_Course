@@ -8,7 +8,7 @@
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::EffectApplied);
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponent::ClientEffectApplied);
 }
 
 void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UAuraGameplayAbility>>& AbilitiesToAdd)
@@ -22,15 +22,47 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 void UAuraAbilitySystemComponent::AddCharacterAbility(const TSubclassOf<UAuraGameplayAbility>& AbilityToAdd, int32 level)
 {
 	FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityToAdd, level);
-	//GiveAbility(AbilitySpec);
-	GiveAbilityAndActivateOnce(AbilitySpec);
+	if (const UAuraGameplayAbility* Ability = Cast<UAuraGameplayAbility>(AbilitySpec.Ability))
+	{
+		AbilitySpec.DynamicAbilityTags.AddTag(Ability->StartupInputTag);
+		GiveAbility(AbilitySpec);
+	}
 }
 
-void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+void UAuraAbilitySystemComponent::AbilityInputHeld(const FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid()) return;
+
+	for (auto& Ability : GetActivatableAbilities())
+	{
+		if (Ability.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(Ability);
+			if (!Ability.IsActive())
+			{
+				TryActivateAbility(Ability.Handle);
+			}
+		}
+	}
+}
+
+void UAuraAbilitySystemComponent::AbilityInputReleased(const FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid()) return;
+
+	for (auto& Ability : GetActivatableAbilities())
+	{
+		if (Ability.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputReleased(Ability);
+		}
+	}
+}
+
+void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* ASC, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
 {
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
 
-	EffectAssetTagsReceived.Broadcast(TagContainer);
-	
+	EffectAssetTagsReceived.Broadcast(TagContainer);	
 }

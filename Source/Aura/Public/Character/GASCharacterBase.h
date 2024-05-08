@@ -30,6 +30,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
 
+	virtual FVector GetProjectileSpawnSocketLocation() const override;
+
 	void InitializeDefaultAttributes() const;
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const;
 
@@ -38,6 +40,8 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	FName WeaponProjectileSocket;
 
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AbilitySystemComponent;

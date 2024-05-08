@@ -16,6 +16,7 @@ public:
 	static const FAuraGameplayTags& Get() { return AuraGameplayTags; }
 	static void InitializeGameplayTags();
 
+#pragma region Attributes
 	FGameplayTag Attributes_Vital_Health;
 	FGameplayTag Attributes_Vital_Mana;
 
@@ -35,6 +36,15 @@ public:
 	FGameplayTag Attributes_Secondary_ManaRegen;
 	FGameplayTag Attributes_Secondary_MaxHealth;
 	FGameplayTag Attributes_Secondary_MaxMana;
+#pragma endregion
+#pragma region Inputs
+	FGameplayTag Input_LMB;
+	FGameplayTag Input_RMB;
+	FGameplayTag Input_1;
+	FGameplayTag Input_2;
+	FGameplayTag Input_3;
+	FGameplayTag Input_4;
+#pragma endregion
 
 protected:
 

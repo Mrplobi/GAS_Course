@@ -22,6 +22,11 @@ void AGASCharacterBase::InitAbilityActorInfo()
 {
 }
 
+FVector AGASCharacterBase::GetProjectileSpawnSocketLocation() const
+{
+	return Weapon->GetSocketLocation(WeaponProjectileSocket);
+}
+
 void AGASCharacterBase::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1);
