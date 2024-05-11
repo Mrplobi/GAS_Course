@@ -3,34 +3,40 @@
 
 #include "AbilitySystem/Abilities/AuraProjectileAbility.h"
 #include "Actor/AuraProjectile.h"
+#include "Kismet/GameplayStatics.h"
 #include <Interaction/CombatInterface.h>
 
 void UAuraProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
 
-	const bool bIsServer = HasAuthority(&ActivationInfo);
-	if (bIsServer)
+void UAuraProjectileAbility::SpawnProjectile(const FVector& ProjectileTargetLocation)
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
+	ICombatInterface* CallingInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
+	if (bIsServer && CallingInterface != nullptr)
 	{
-		if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
-		{
-			FTransform SpawnTransform = FTransform(CombatInterface->GetProjectileSpawnSocketLocation());
+		FVector SpawnLoc = CallingInterface->GetProjectileSpawnSocketLocation();
 
-			//TODO : Set Projectile ROt
+		FRotator SpawnRot = (ProjectileTargetLocation - SpawnLoc).Rotation();
+		SpawnRot.Pitch = 0; //Ensure projectile flies parralele to ground
 
-			AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
-				ProjectileClass,
-				SpawnTransform,
-				GetOwningActorFromActorInfo(),
-				Cast<APawn>(GetOwningActorFromActorInfo()),
-				ESpawnActorCollisionHandlingMethod::AlwaysSpawn,
-				ESpawnActorScaleMethod::OverrideRootScale
-				);
+		FTransform SpawnTransform;
+		SpawnTransform.SetLocation(SpawnLoc);
+		SpawnTransform.SetRotation(SpawnRot.Quaternion());
 
-			//TODO : Set Projectile effect spec
+		AAuraProjectile* Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(
+			ProjectileClass,
+			SpawnTransform,
+			GetOwningActorFromActorInfo(),
+			Cast<APawn>(GetOwningActorFromActorInfo()),
+			ESpawnActorCollisionHandlingMethod::AlwaysSpawn,
+			ESpawnActorScaleMethod::OverrideRootScale
+		);
 
-			Projectile->FinishSpawning(SpawnTransform);
-		}
-		
+		//TODO : Set Projectile effect spec
+
+		Projectile->FinishSpawning(SpawnTransform);
 	}
 }

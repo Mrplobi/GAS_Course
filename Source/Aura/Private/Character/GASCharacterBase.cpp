@@ -1,11 +1,18 @@
 // By Plobindustries
 
 #include "Character/GASCharacterBase.h"
-#include "AbilitySystem/AuraAbilitySystemComponent.h"	
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
+#include <Aura/Aura.h>
 
 AGASCharacterBase::AGASCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECollisionResponse::ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
