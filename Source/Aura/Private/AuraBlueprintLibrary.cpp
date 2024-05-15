@@ -7,6 +7,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include <Player/AuraPlayerState.h>
 #include <UI/HUD/AuraHUD.h>
+#include <Game/GASGameModeBase.h>
 
 UOverlayWidgetController* UAuraBlueprintLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
@@ -42,4 +43,30 @@ UAttributeMenuWidgetController* UAuraBlueprintLibrary::GetAttributeWidgetControl
 		}
 	}
 	return nullptr;
+}
+
+void UAuraBlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject, UAuraAbilitySystemComponent* ASCToInit, ECharacterClass CharacterClass, float Level)
+{
+	if (AGASGameModeBase* GM = Cast<AGASGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	{
+		UAuraCharacterInfo* CharacterInfo = GM->GetCharacterInfo();
+		const FCharacterClassDefaultInfo ClassDefault = CharacterInfo->GetCharacterInfoFromClass(CharacterClass);
+
+		AActor* SourceActor = ASCToInit->GetAvatarActor();
+
+		FGameplayEffectContextHandle PrimaryContext = ASCToInit->MakeEffectContext();
+		PrimaryContext.AddSourceObject(SourceActor);
+		const FGameplayEffectSpecHandle PrimaryHandle = ASCToInit->MakeOutgoingSpec(ClassDefault.PrimarySetEffect, Level, PrimaryContext);
+		ASCToInit->ApplyGameplayEffectSpecToSelf(*PrimaryHandle.Data.Get());
+
+		FGameplayEffectContextHandle SecondaryContext = ASCToInit->MakeEffectContext();
+		SecondaryContext.AddSourceObject(SourceActor);
+		const FGameplayEffectSpecHandle SecondaryHandle = ASCToInit->MakeOutgoingSpec(CharacterInfo->SecondarySetEffect, Level, SecondaryContext);
+		ASCToInit->ApplyGameplayEffectSpecToSelf(*SecondaryHandle.Data.Get());
+
+		FGameplayEffectContextHandle VitalContext = ASCToInit->MakeEffectContext();
+		VitalContext.AddSourceObject(SourceActor);
+		const FGameplayEffectSpecHandle VitalHandle = ASCToInit->MakeOutgoingSpec(CharacterInfo->VitalSetEffect, Level, VitalContext);
+		ASCToInit->ApplyGameplayEffectSpecToSelf(*VitalHandle.Data.Get());
+	}
 }

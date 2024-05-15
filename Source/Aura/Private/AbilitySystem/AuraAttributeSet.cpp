@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include <AbilitySystemBlueprintLibrary.h>
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -60,6 +61,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0, GetMaxHealth()));
+		UE_LOG(LogTemp, Warning, TEXT("Health changed for %s, new value %f"), *EffectProperties.TargetCharacter->GetName(), GetHealth());
 	}
 	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
@@ -91,11 +93,10 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 		}
 	}
 	
-	Properties.TargetASC = Properties.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
-	if (IsValid(Properties.TargetASC) && Properties.TargetASC->AbilityActorInfo.IsValid() && Properties.TargetASC->AbilityActorInfo->AvatarActor.IsValid())
+	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 	{
-		Properties.TargetAvatarActor = Properties.TargetASC->AbilityActorInfo->AvatarActor.Get();
-		Properties.TargetController = Properties.TargetASC->AbilityActorInfo->PlayerController.Get();
+		Properties.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		Properties.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
 		if (Properties.TargetController == nullptr && Properties.TargetAvatarActor != nullptr)
 		{
 			if (const APawn* Pawn = Cast<APawn>(Properties.TargetAvatarActor))
@@ -107,6 +108,7 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 		{
 			Properties.TargetCharacter = Cast<ACharacter>(Properties.TargetController->GetPawn());
 		}
+		Properties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Properties.TargetAvatarActor);
 	}
 }
 

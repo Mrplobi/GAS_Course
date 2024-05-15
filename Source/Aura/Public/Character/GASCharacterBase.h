@@ -32,7 +32,7 @@ protected:
 
 	virtual FVector GetProjectileSpawnSocketLocation() const override;
 
-	void InitializeDefaultAttributes() const;
+	virtual void InitializeDefaultAttributes() const;
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const;
 
 	void AddCharacterStartingAbilities();

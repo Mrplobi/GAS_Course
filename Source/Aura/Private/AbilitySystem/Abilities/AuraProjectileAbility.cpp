@@ -5,6 +5,8 @@
 #include "Actor/AuraProjectile.h"
 #include "Kismet/GameplayStatics.h"
 #include <Interaction/CombatInterface.h>
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 void UAuraProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
@@ -35,7 +37,8 @@ void UAuraProjectileAbility::SpawnProjectile(const FVector& ProjectileTargetLoca
 			ESpawnActorScaleMethod::OverrideRootScale
 		);
 
-		//TODO : Set Projectile effect spec
+		const UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		Projectile->DamageEffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), AbilitySystemComponent->MakeEffectContext());
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}

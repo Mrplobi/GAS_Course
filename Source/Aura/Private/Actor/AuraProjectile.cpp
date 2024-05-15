@@ -7,6 +7,8 @@
 #include <Kismet/GameplayStatics.h>
 #include "NiagaraFunctionLibrary.h"
 #include <Aura/Aura.h>
+#include <AbilitySystemBlueprintLibrary.h>
+#include "AbilitySystemComponent.h"
 
 // Sets default values
 AAuraProjectile::AAuraProjectile()
@@ -40,6 +42,11 @@ void AAuraProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 	if (HasAuthority())
 	{
+		UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor);
+		if (TargetASC)
+		{
+			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
+		}
 		Destroy();
 	}
 }
