@@ -8,6 +8,7 @@
 #include <Player/AuraPlayerState.h>
 #include <UI/HUD/AuraHUD.h>
 #include <Game/GASGameModeBase.h>
+#include "Abilities/GameplayAbility.h"
 
 UOverlayWidgetController* UAuraBlueprintLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
 {
@@ -68,5 +69,20 @@ void UAuraBlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldCont
 		VitalContext.AddSourceObject(SourceActor);
 		const FGameplayEffectSpecHandle VitalHandle = ASCToInit->MakeOutgoingSpec(CharacterInfo->VitalSetEffect, Level, VitalContext);
 		ASCToInit->ApplyGameplayEffectSpecToSelf(*VitalHandle.Data.Get());
+	}
+}
+
+void UAuraBlueprintLibrary::InitializeAbilities(const UObject* WorldContextObject, UAuraAbilitySystemComponent* ASCToInit, ECharacterClass CharacterClass, float Level)
+{
+	if (AGASGameModeBase* GM = Cast<AGASGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject)))
+	{
+		UAuraCharacterInfo* CharacterInfo = GM->GetCharacterInfo();
+		//const FCharacterClassDefaultInfo ClassDefault = CharacterInfo->GetCharacterInfoFromClass(CharacterClass);
+
+		for (TSubclassOf<UGameplayAbility> Ability : CharacterInfo->CommonAbilities)
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability, Level);
+			ASCToInit->GiveAbility(Ability);
+		}
 	}
 }

@@ -7,6 +7,7 @@
 #include "AuraCharacterInfo.generated.h"
 
 class UGameplayEffect;
+class UGameplayAbility;
 
 UENUM(BlueprintType)
 enum class ECharacterClass : uint8
@@ -24,6 +25,8 @@ struct FCharacterClassDefaultInfo
 
 	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
 	TSubclassOf<UGameplayEffect> PrimarySetEffect;
+	UPROPERTY(EditDefaultsOnly, Category = "Class Defaults")
+	TArray<TSubclassOf<UGameplayAbility>> Abilities;
 };
 
 /**
@@ -41,6 +44,8 @@ public:
 	TSubclassOf<UGameplayEffect> SecondarySetEffect;
 	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
 	TSubclassOf<UGameplayEffect> VitalSetEffect;
+	UPROPERTY(EditDefaultsOnly, Category = "Common Class Defaults")
+	TArray<TSubclassOf<UGameplayAbility>> CommonAbilities;
 
 public:
 	FCharacterClassDefaultInfo GetCharacterInfoFromClass(ECharacterClass Class);

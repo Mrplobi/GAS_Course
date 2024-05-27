@@ -34,4 +34,7 @@ void FAuraGameplayTags::InitializeGameplayTags()
 	AuraGameplayTags.Input_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.2"));
 	AuraGameplayTags.Input_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.3"));
 	AuraGameplayTags.Input_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.4"));
+
+	AuraGameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage"));
+	AuraGameplayTags.Effects_HitStun = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Effects.HitStun"));
 }

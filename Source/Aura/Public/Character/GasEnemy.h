@@ -10,6 +10,7 @@
 #include "GasEnemy.generated.h"
 
 class UWidgetComponent;
+struct FGameplayTag;
 /**
  * 
  */
@@ -26,6 +27,9 @@ public:
 
 	// Inherited via ICombatInterface
 	virtual int32 GetCharacterLevel() const override;
+	virtual void Die() override;
+
+	void HitStunStatusChanged(const FGameplayTag TagChanged, int32 tagCount);
 
 protected:
 	virtual void BeginPlay() override;
@@ -48,5 +52,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthWidget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Combat")
+	float DeathLifeSpan = 5.0f;
+	UPROPERTY(BlueprintReadOnly, Category = "Combat")
+	bool bShouldbeStunned = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Combat")
+	float BaseWalkSpeed = 250.f;
 
 };

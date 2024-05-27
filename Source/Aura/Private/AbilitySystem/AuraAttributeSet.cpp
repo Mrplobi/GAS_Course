@@ -6,6 +6,8 @@
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include <AbilitySystemBlueprintLibrary.h>
+#include <AuraGameplayTags.h>
+#include "Interaction/CombatInterface.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -66,6 +68,29 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	else if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		SetMana(FMath::Clamp(GetMana(), 0, GetMaxMana()));
+	}
+	else if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		const float LocalIncomingDamage = GetIncomingDamage();
+		SetIncomingDamage(0);
+		if (LocalIncomingDamage != 0)
+		{
+			const float NewHealth = GetHealth() - LocalIncomingDamage;
+			SetHealth(FMath::Clamp(NewHealth, 0, GetMaxHealth()));
+			if (NewHealth >= 0)
+			{
+				const FGameplayTagContainer& GameplayTagContainer = FGameplayTagContainer(FAuraGameplayTags::Get().Effects_HitStun);
+				EffectProperties.TargetASC->TryActivateAbilitiesByTag(GameplayTagContainer);
+				UE_LOG(LogTemp, Warning, TEXT("HIT"));
+			}
+			else
+			{
+				if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(EffectProperties.TargetAvatarActor))
+				{
+					CombatInterface->Die();
+				}
+			}
+		}
 	}
 }
 

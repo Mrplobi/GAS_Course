@@ -45,6 +45,8 @@ public:
 	FGameplayTag Input_3;
 	FGameplayTag Input_4;
 #pragma endregion
+	FGameplayTag Damage;
+	FGameplayTag Effects_HitStun;
 
 protected:
 

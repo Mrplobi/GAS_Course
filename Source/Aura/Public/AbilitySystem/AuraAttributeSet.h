@@ -175,4 +175,9 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ManaRegen);
 #pragma endregion
 
+#pragma region Meta Attributes
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Category")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
+#pragma endregion
 };

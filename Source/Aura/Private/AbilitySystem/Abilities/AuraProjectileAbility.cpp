@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include <Interaction/CombatInterface.h>
 #include "AbilitySystemBlueprintLibrary.h"
+#include "Aura/Public/AuraGameplayTags.h"
 #include "AbilitySystemComponent.h"
 
 void UAuraProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
@@ -38,7 +39,11 @@ void UAuraProjectileAbility::SpawnProjectile(const FVector& ProjectileTargetLoca
 		);
 
 		const UAbilitySystemComponent* AbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
-		Projectile->DamageEffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), AbilitySystemComponent->MakeEffectContext());
+		const FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), AbilitySystemComponent->MakeEffectContext());
+		const FAuraGameplayTags AuraTags = FAuraGameplayTags::Get();
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, AuraTags.Damage, Power.GetValueAtLevel(GetAbilityLevel()));
+
+		Projectile->DamageEffectSpecHandle = SpecHandle;
 
 		Projectile->FinishSpawning(SpawnTransform);
 	}

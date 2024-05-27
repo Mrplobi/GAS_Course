@@ -8,6 +8,7 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/AuraUserWidget.h"
 #include <AuraBlueprintLibrary.h>
+#include <AuraGameplayTags.h>
 
 AGasEnemy::AGasEnemy()
 {
@@ -39,6 +40,11 @@ int32 AGasEnemy::GetCharacterLevel() const
 {
 	return Level;
 }
+void AGasEnemy::Die()
+{
+	SetLifeSpan(DeathLifeSpan);
+	Super::Die();
+}
 
 void AGasEnemy::BeginPlay()
 {
@@ -50,6 +56,7 @@ void AGasEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	AbilitySystemComponent->AbilityActorInfoSet();
+	UAuraBlueprintLibrary::InitializeAbilities(this, AbilitySystemComponent);
 
 	if (UAuraUserWidget* AuraWidget = Cast<UAuraUserWidget>(HealthWidget->GetUserWidgetObject()))
 	{
@@ -67,7 +74,15 @@ void AGasEnemy::InitAbilityActorInfo()
 			OnMaxHealthChanged.Broadcast(Data.NewValue);
 		});
 
+	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitStun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGasEnemy::HitStunStatusChanged);
+
 	InitializeDefaultAttributes();
+}
+
+void AGasEnemy::HitStunStatusChanged(const FGameplayTag TagChanged, int32 tagCount)
+{
+	bShouldbeStunned = tagCount > 0;
+
 }
 
 void AGasEnemy::InitializeDefaultAttributes() const
