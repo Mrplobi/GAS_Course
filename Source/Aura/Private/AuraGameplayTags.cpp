@@ -27,18 +27,34 @@ void FAuraGameplayTags::InitializeGameplayTags()
 	AuraGameplayTags.Attributes_Secondary_MaxHealth = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.MaxHealth"));
 	AuraGameplayTags.Attributes_Secondary_MaxMana = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Secondary.MaxMana"));
 
-
+	
 	AuraGameplayTags.Input_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.LMB"));
 	AuraGameplayTags.Input_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.RMB"));
 	AuraGameplayTags.Input_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.1"));
 	AuraGameplayTags.Input_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.2"));
 	AuraGameplayTags.Input_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.3"));
 	AuraGameplayTags.Input_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Input.4"));
+	/*
+	Damage types
+	*/
+	AuraGameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageType.Fire"));
+	AuraGameplayTags.Damage_Lighting = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageType.Lightning"));
+	AuraGameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageType.Physical"));
+	AuraGameplayTags.Damage_Magic = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageType.Magic"));
+	/*
+	Damage Resistances
+	*/
+	AuraGameplayTags.Resistance_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Resistance.Fire"));
+	AuraGameplayTags.Resistance_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Resistance.Lightning"));
+	AuraGameplayTags.Resistance_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Resistance.Physical"));
+	AuraGameplayTags.Resistance_Magic = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Resistance.Magic"));
 
-	AuraGameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage"));
-	AuraGameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("DamageType.Fire"));
+
+	AuraGameplayTags.ResistancePerDamageType.Add(AuraGameplayTags.Damage_Fire, AuraGameplayTags.Resistance_Fire);
+	AuraGameplayTags.ResistancePerDamageType.Add(AuraGameplayTags.Damage_Lighting, AuraGameplayTags.Resistance_Lightning);
+	AuraGameplayTags.ResistancePerDamageType.Add(AuraGameplayTags.Damage_Physical, AuraGameplayTags.Resistance_Physical);
+	AuraGameplayTags.ResistancePerDamageType.Add(AuraGameplayTags.Damage_Magic, AuraGameplayTags.Resistance_Magic);
+
 	AuraGameplayTags.Effects_HitStun = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Effects.HitStun"));
 
-	AuraGameplayTags.DamageTypes.Add(AuraGameplayTags.Damage);
-	AuraGameplayTags.DamageTypes.Add(AuraGameplayTags.Damage_Fire);
 }

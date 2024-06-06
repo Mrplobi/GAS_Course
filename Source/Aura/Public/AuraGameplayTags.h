@@ -45,11 +45,27 @@ public:
 	FGameplayTag Input_3;
 	FGameplayTag Input_4;
 #pragma endregion
-	FGameplayTag Damage;
-	FGameplayTag Damage_Fire;
-	FGameplayTag Effects_HitStun;
 
-	TArray<FGameplayTag> DamageTypes;
+#pragma region Damage Related
+	FGameplayTag Damage_Fire;
+	FGameplayTag Damage_Lighting;
+	FGameplayTag Damage_Physical;
+	FGameplayTag Damage_Magic;
+
+	FGameplayTag Weakness_Fire;
+	FGameplayTag Weakness_Lightning;
+	FGameplayTag Weakness_Physical;
+	FGameplayTag Weakness_Magic;
+
+	FGameplayTag Resistance_Fire;
+	FGameplayTag Resistance_Lightning;
+	FGameplayTag Resistance_Physical;
+	FGameplayTag Resistance_Magic;
+
+	TMap<FGameplayTag, FGameplayTag> ResistancePerDamageType;
+
+	FGameplayTag Effects_HitStun;
+#pragma endregion
 
 protected:
 

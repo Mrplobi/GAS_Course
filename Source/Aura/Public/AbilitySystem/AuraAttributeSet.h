@@ -99,6 +99,15 @@ public:
 	void OnRep_HealthRegen(const FGameplayAttributeData& OldHealthRegen) const;
 	UFUNCTION()
 	void OnRep_ManaRegen(const FGameplayAttributeData& OldManaRegen) const;
+	//Resistance
+	UFUNCTION()
+	void OnRep_FireResistance(const FGameplayAttributeData& OldRes) const;
+	UFUNCTION()
+	void OnRep_LightningResistance(const FGameplayAttributeData& OldRes) const;
+	UFUNCTION()
+	void OnRep_PhysicalResistance(const FGameplayAttributeData& OldRes) const;
+	UFUNCTION()
+	void OnRep_MagicResistance(const FGameplayAttributeData& OldRes) const;
 #pragma endregion
 
 private:
@@ -175,6 +184,20 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ManaRegen, Category = "Attributes|Secondary Attributes")
 	FGameplayAttributeData ManaRegen;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, ManaRegen);
+#pragma endregion
+#pragma region Resistance Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_FireResistance, Category = "Attributes|Resistance Attributes")
+	FGameplayAttributeData FireResistance;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, FireResistance);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_LightningResistance, Category = "Attributes|Resistance Attributes")
+	FGameplayAttributeData LightningResistance;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, LightningResistance);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PhysicalResistance, Category = "Attributes|Resistance Attributes")
+	FGameplayAttributeData PhysicalResistance;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, PhysicalResistance);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MagicResistance, Category = "Attributes|Resistance Attributes")
+	FGameplayAttributeData MagicResistance;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MagicResistance);
 #pragma endregion
 
 #pragma region Meta Attributes
