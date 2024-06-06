@@ -43,5 +43,19 @@ public:
 	/// <param name="Level"></param>
 	UFUNCTION(BlueprintCallable, Category = "AuraBlueprintLibrary|Class Defaults")
 	static void InitializeAbilities(const UObject* WorldContextObject, UAuraAbilitySystemComponent* ASCToInit, ECharacterClass CharacterClass = ECharacterClass::Default, float Level = 1);
-	
+
+	UFUNCTION(BlueprintCallable, Category = "AuraBlueprintLibrary|Class Data")
+	static UAuraCharacterInfo* GetCharacterInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category = "AuraBlueprintLibrary|Gameplay Effects")
+	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure, Category = "AuraBlueprintLibrary|Gameplay Effects")
+	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION()
+	static void SetBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlock);
+
+	UFUNCTION()
+	static void SetCriticalHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsCrit);
 };

@@ -8,6 +8,9 @@
 #include <AbilitySystemBlueprintLibrary.h>
 #include <AuraGameplayTags.h>
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include <Player/AuraPlayerController.h>
+#include <AuraBlueprintLibrary.h>
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -90,6 +93,10 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 					CombatInterface->Die();
 				}
 			}
+
+			bool bIsBlock = UAuraBlueprintLibrary::IsBlockedHit(EffectProperties.EffectContextHandle);
+			bool bIsCrit = UAuraBlueprintLibrary::IsCriticalHit(EffectProperties.EffectContextHandle);
+			ShowFloatingText(EffectProperties, LocalIncomingDamage, bIsCrit, bIsBlock);
 		}
 	}
 }
@@ -134,6 +141,14 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 			Properties.TargetCharacter = Cast<ACharacter>(Properties.TargetController->GetPawn());
 		}
 		Properties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Properties.TargetAvatarActor);
+	}
+}
+
+void UAuraAttributeSet::ShowFloatingText(FEffectProperties& EffectProperties, const float Damage, bool bIsCrit, bool bIsBlock) const
+{
+	if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0)))
+	{
+		PC->ShowDamageNumber(EffectProperties.TargetCharacter, Damage, bIsCrit, bIsBlock);
 	}
 }
 

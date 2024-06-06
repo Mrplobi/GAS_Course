@@ -15,6 +15,8 @@ class UAuraInputConfig;
 struct FGameplayTag;
 class UAuraAbilitySystemComponent;
 class USplineComponent;
+class UWidgetComponent;
+class UDamageTextComponent;
 
 /**
  * 
@@ -28,6 +30,8 @@ public:
 	AAuraPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
 
+	UFUNCTION(Client, Reliable)
+	void ShowDamageNumber(ACharacter* TargetCharacter, float Damage, bool bIsCrit, bool bIsBlock);
 
 protected:
 	virtual void BeginPlay() override;
@@ -66,7 +70,10 @@ private:
 	UPROPERTY()
 	TObjectPtr<UAuraAbilitySystemComponent> AbilitySystemComponent;
 
-#pragma region Click To Move
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextClass;
+
+#pragma region Click To Move Behavior
 	FVector CachedDestination = FVector::Zero();
 	float FollowTime = 0;
 	bool bIsAutoRunning = false;

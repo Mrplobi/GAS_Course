@@ -46,7 +46,10 @@ public:
 	FGameplayTag Input_4;
 #pragma endregion
 	FGameplayTag Damage;
+	FGameplayTag Damage_Fire;
 	FGameplayTag Effects_HitStun;
+
+	TArray<FGameplayTag> DamageTypes;
 
 protected:
 

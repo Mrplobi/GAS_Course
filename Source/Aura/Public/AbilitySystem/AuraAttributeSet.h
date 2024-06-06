@@ -60,6 +60,7 @@ public:
 
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 
+
 #pragma region Rep Notifies
 	//Vital
 	UFUNCTION()
@@ -102,6 +103,7 @@ public:
 
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Properties) const;
+	void ShowFloatingText(FEffectProperties& EffectProperties, const float LocalIncomingDamage, bool bIsCrit, bool bIsBlock) const;
 
 public:
 
