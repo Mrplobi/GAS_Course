@@ -85,6 +85,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		{
 			const float NewHealth = GetHealth() - LocalIncomingDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0, GetMaxHealth()));
+			UE_LOG(LogTemp, Warning, TEXT("Health changed for %s, new value %f"), *EffectProperties.TargetCharacter->GetName(), GetHealth());
 			if (NewHealth >= 0)
 			{
 				const FGameplayTagContainer& GameplayTagContainer = FGameplayTagContainer(FAuraGameplayTags::Get().Effects_HitStun);

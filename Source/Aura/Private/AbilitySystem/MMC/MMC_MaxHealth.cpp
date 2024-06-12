@@ -8,7 +8,7 @@
 UMMC_MaxHealth::UMMC_MaxHealth()
 {
 	VigorDef.AttributeToCapture = UAuraAttributeSet::GetVigorAttribute();
-	VigorDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Target;
+	VigorDef.AttributeSource = EGameplayEffectAttributeCaptureSource::Source;
 	VigorDef.bSnapshot = false;
 
 	RelevantAttributesToCapture.Add(VigorDef);
@@ -31,5 +31,5 @@ float UMMC_MaxHealth::CalculateBaseMagnitude_Implementation(const FGameplayEffec
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(Spec.GetContext().GetSourceObject());
 	const int32 CharacterLevel = CombatInterface->GetCharacterLevel();
 
-	return 80.f + 2.5f * VigorMag + 10.f * CharacterLevel;
+	return BaseHealth + AttributeMultiplier * VigorMag + LevelBonus * CharacterLevel;
 }

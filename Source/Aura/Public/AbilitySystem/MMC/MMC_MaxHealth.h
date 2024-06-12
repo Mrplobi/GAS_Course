@@ -19,6 +19,14 @@ public:
 
 	virtual float CalculateBaseMagnitude_Implementation(const FGameplayEffectSpec& Spec) const override;
 
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	float BaseHealth = 50.f;
+	UPROPERTY(EditDefaultsOnly)
+	float AttributeMultiplier = 2.5f;
+	UPROPERTY(EditDefaultsOnly)
+	float LevelBonus = 10.f;
+
 private:
 	FGameplayEffectAttributeCaptureDefinition VigorDef;
 };
