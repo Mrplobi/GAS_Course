@@ -152,7 +152,7 @@ void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 
 void UAuraAttributeSet::ShowFloatingText(FEffectProperties& EffectProperties, const float Damage, bool bIsCrit, bool bIsBlock) const
 {
-	if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0)))
+	if (AAuraPlayerController* PC = Cast<AAuraPlayerController>(EffectProperties.SourceCharacter->Controller))
 	{
 		PC->ShowDamageNumber(EffectProperties.TargetCharacter, Damage, bIsCrit, bIsBlock);
 	}
