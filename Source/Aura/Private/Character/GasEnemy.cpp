@@ -56,16 +56,12 @@ void AGasEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	AbilitySystemComponent->AbilityActorInfoSet();
-	if (HasAuthority())
-	{
-		UAuraBlueprintLibrary::InitializeAbilities(this, AbilitySystemComponent);
-		InitializeDefaultAttributes();
-	}
 
 	if (UAuraUserWidget* AuraWidget = Cast<UAuraUserWidget>(HealthWidget->GetUserWidgetObject()))
 	{
 		AuraWidget->SetWidgetController(this);
 	};
+
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data) {
@@ -80,6 +76,11 @@ void AGasEnemy::InitAbilityActorInfo()
 
 	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitStun, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &AGasEnemy::HitStunStatusChanged);
 
+	if (HasAuthority())
+	{
+		UAuraBlueprintLibrary::InitializeAbilities(this, AbilitySystemComponent);
+		InitializeDefaultAttributes();
+	}
 }
 
 void AGasEnemy::HitStunStatusChanged(const FGameplayTag TagChanged, int32 tagCount)
