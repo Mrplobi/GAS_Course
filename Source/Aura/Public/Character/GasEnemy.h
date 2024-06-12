@@ -10,6 +10,8 @@
 #include "GasEnemy.generated.h"
 
 class UWidgetComponent;
+class UBehaviorTree;
+class AGASAIController;
 struct FGameplayTag;
 /**
  * 
@@ -21,6 +23,9 @@ class AURA_API AGasEnemy : public AGASCharacterBase, public IHoverInterface
 	
 public:
 	AGasEnemy();
+
+	virtual void PossessedBy(AController* NewController) override;
+
 	// Inherited via IHoverInterface
 	void HighlightActor() override;
 	void UnhighlightActor() override;
@@ -60,4 +65,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	float BaseWalkSpeed = 250.f;
 
+#pragma region AI Behavior
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+	UPROPERTY()
+	TObjectPtr<AGASAIController> GASAIController;
+#pragma endregion
 };

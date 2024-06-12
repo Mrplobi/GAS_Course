@@ -9,6 +9,9 @@
 #include "UI/Widget/AuraUserWidget.h"
 #include <AuraBlueprintLibrary.h>
 #include <AuraGameplayTags.h>
+#include "AI/GASAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 AGasEnemy::AGasEnemy()
 {
@@ -20,6 +23,16 @@ AGasEnemy::AGasEnemy()
 	HealthWidget->SetupAttachment(GetRootComponent());
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+}
+
+void AGasEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (!HasAuthority()) return;
+
+	GASAIController = Cast<AGASAIController>(NewController);
+	GASAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	GASAIController->RunBehaviorTree(BehaviorTree);
 }
 
 void AGasEnemy::HighlightActor()
